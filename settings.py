@@ -25,16 +25,16 @@ if 'test' in sys.argv:
             'NAME': 'testing'
         }
     }
-    
+
 MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'test',                      # Or path to database file if using sqlite3.
+        'NAME': 'celery_test',                      # Or path to database file if using sqlite3.
         'USER': 'root',                      # Not used with sqlite3.
         'PASSWORD': '',                  # Not used with sqlite3.
-        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
+        'HOST': '127.0.0.1',                      # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
     }
 }
@@ -46,7 +46,7 @@ DATABASES = {
 # timezone as the operating system.
 # If running in a Windows environment this must be set to the same as your
 # system time zone.
-TIME_ZONE = 'America/Chicago'
+TIME_ZONE = 'US/Eastern'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
@@ -180,7 +180,7 @@ else:
     BROKER_USER = "tester"
     BROKER_PASSWORD = "tester"
     BROKER_VHOST = "test_vhost"
-    
+
 # If this is set, periodic tasks are automatically pulled from tasks.py
 # and stored in the database.  I don't know why it allows admins to delete them, though
 # If this is not present, the CELERYBEAT_SCHEDULE variable appars to be used
@@ -194,13 +194,14 @@ CELERY_REDIRECT_STDOUTS = True
 CELERY_REDIRECT_STDOUTS_LEVEL = 'DEBUG'
 CELERY_TASK_RESULT_EXPIRES = 4*60*60
 CELERYD_FORCE_EXECV = False
-CELERY_ENABLE_UTC = False
+CELERY_ENABLE_UTC = False # setting this to True causes celery to use crontab hours as UTC hours
+CELERY_TIMEZONE = TIME_ZONE
 CELERY_RESULT_EXCHANGE = "celeryresults2"
 
 # Make sure exceptions propagate
 if (TEST):
     CELERY_EAGER_PROPAGATES_EXCEPTIONS = True
-    
+
 # This will make all Celery tasks execute immediately when we are testing
 # http://celeryproject.org/docs/django-celery/cookbook/unit-testing.html
 TEST_RUNNER = 'djcelery.contrib.test_runner.CeleryTestSuiteRunner'
